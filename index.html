@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Form Login</title>
+	<link rel="stylesheet" href="">
+	<script>
+		function kirim_login() {
+		    xmlhttp = get_xml_http();
+		    if (xmlhttp == null) {
+		        alert("Your borwser does not support the XMLHttpRequest object");
+		        return
+		    }
+		    var url ="proses_login.php";
+		    var content = get_content();
+		    xmlhttp.open("POST", url, !0);
+		    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		    xmlhttp.setRequestHeader("Content-length", content.length);
+		    xmlhttp.setRequestHeader("Connection", "close");
+		    xmlhttp.onreadystatechange = state_changed;
+		    xmlhttp.send(content);
+
+		    function get_content() {
+		        var string = "";
+		        var form = document.forms.form_login;
+		        string += form.email.name + "=";
+		        string += form.email.value;
+		        string += "&";
+		        string += form.password.name + "=";
+		        string += form.password.value;
+		        string += "&";
+		        string += form.login.name + "=";
+		        string += form.login.value;
+
+		        return string
+		    }
+
+		    function state_changed() {
+		        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		            var alert_data = document.getElementById('ajax_login').innerHTML = xmlhttp.responseText;
+
+		            if (alert_data.trim()== "Berhasil") {
+		                window.location.href ="beranda.php";
+		                return !1
+		            }
+		        }
+		    }
+		}
+
+
+		function get_xml_http() {
+		    if (window.XMLHttpRequest) {
+		        return new XMLHttpRequest()
+		    }
+		    if (window.ActiveXObject) {
+		        return new ActiveXObject("Microsoft.XMLHTTP")
+		    }
+		    return null
+		}
+	</script>
+</head>
+<body>
+	<h1>Login Member </h1>
+	<div style="margin: 20px;font-weight: bold;" id="ajax_login"></div>
+	<form action="javascript:void(0);" method="post" name="form_login">
+		<table border="0">
+			<tbody>
+				<tr>
+					<td>Email</td>
+					<td><input type="text" name="email"></td>
+				</tr>			
+				<tr>
+					<td>Password</td>
+					<td><input type="password" name="password"></td>
+				</tr>						
+				<tr>
+					<td>&nbsp;</td>
+					<td><input type="submit" onclick="return kirim_login();" name="login" value="Login"></td>
+				</tr>										
+			</tbody>
+		</table>
+	</form>
+</body>
+</html>
